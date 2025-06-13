@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Xeo's Second Project</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #c94be9;
+      --accent-light: #ff9de2;
+      --text-light: #121212;
+      --text-dark: #f0f0f0;
+      --bg-light: #ffffff;
+      --bg-dark: #0f0f0f;
+      --glass-light: rgba(255, 255, 255, 0.15);
+      --glass-dark: rgba(20, 20, 20, 0.4);
+      --transition: 0.4s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    html, body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg-light);
+      color: var(--text-light);
+      transition: all var(--transition);
+      overflow-x: hidden;
+    }
+
+    body.dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    video.bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -2;
+      opacity: 0.2;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 1rem;
+      z-index: 20;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    body.dark-mode nav {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    nav a {
+      color: var(--accent);
+      font-weight: bold;
+      text-decoration: none;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0%;
+      height: 2px;
+      background-color: var(--accent-light);
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .toggle-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 10;
+    }
+
+    .toggle-btn {
+      padding: 0.5rem 1.2rem;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(45deg, var(--accent), var(--accent-light));
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      transition: background 0.3s ease;
+    }
+
+    header {
+      text-align: center;
+      padding: 5rem 2rem 2rem;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      background: linear-gradient(to right, var(--accent), var(--accent-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 2rem;
+    }
+
+    section {
+      padding: 2rem 0;
+    }
+
+    .card {
+      background: var(--glass-light);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(15px);
+      transition: all var(--transition);
+    }
+
+    body.dark-mode .card {
+      background: var(--glass-dark);
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+      color: var(--accent);
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li::before {
+      content: "✓";
+      color: var(--accent);
+      margin-right: 0.5rem;
+    }
+
+    li {
+      margin-bottom: 0.8rem;
+      font-weight: 500;
+    }
+
+    a {
+      color: var(--accent-light);
+      text-decoration: none;
+      font-weight: 600;
+      position: relative;
+    }
+
+    a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 0%;
+      height: 2px;
+      background-color: var(--accent-light);
+      transition: width 0.3s ease;
+    }
+
+    a:hover::after {
+      width: 100%;
+    }
+
+    .tool-box button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .tool-box p {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--accent-light);
+    }
+
+    footer {
+      text-align: center;
+      margin: 3rem 0 1rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Videos -->
+  <video id="bg-video-light" class="bg-video" autoplay muted loop>
+    <source src="https://cdn.pixabay.com/vimeo/407653199/anime-32275.mp4" type="video/mp4">
+  </video>
+  <video id="bg-video-dark" class="bg-video" autoplay muted loop style="display: none;">
+    <source src="https://cdn.pixabay.com/vimeo/510938032/anime-101441.mp4" type="video/mp4">
+  </video>
+
+  <!-- Theme Toggle -->
+  <div class="toggle-container">
+    <button class="toggle-btn" onclick="toggleMode()">Toggle Mode</button>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="#about">About</a>
+    <a href="#tools">Tools</a>
+    <a href="#connect">Connect</a>
+  </nav>
+
+  <!-- Header -->
+  <header data-aos="zoom-in">
+    <h1>Welcome to Xeo's Second Project</h1>
+  </header>
+
+  <main>
+    <!-- About Section -->
+    <section id="about" data-aos="fade-up">
+      <div class="card">
+        <p>This is a futuristic HTML/CSS project showcasing interactive UI features, theme transitions, and built-in tools.</p>
+      </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section id="tools" data-aos="fade-up" data-aos-delay="100">
+      <div class="card tool-box">
+        <h2>Tools</h2>
+
+        <div>
+          <p>🎲 Dice Roll: <span id="diceResult">-</span></p>
+          <button onclick="rollDice()">Roll Dice</button>
+        </div>
+
+        <div>
+          <p>🔢 Random Number (1-100): <span id="randNum">-</span></p>
+          <button onclick="randNum()">Generate</button>
+        </div>
+
+        <div>
+          <p>💡 Random Fact: <span id="fact">-</span></p>
+          <button onclick="randFact()">Surprise Me</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Connect Section -->
+    <section id="connect" data-aos="fade-up" data-aos-delay="200">
+      <div class="card">
+        <h2>Connect With Me</h2>
+        <p><a href="https://www.youtube.com/@XeotrLaze" target="_blank">YouTube Channel</a></p>
+        <p><a href="https://github.com/Dazeee0" target="_blank">GitHub Profile</a></p>
+        <p><a href="https://discord.gg/t3CKYVhG" target="_blank">Discord Server</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 Xeo. Powered by creativity ⚡
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true });
+
+    const facts = [
+      "The first website went live in 1991.",
+      "JavaScript was created in just 10 days.",
+      "CSS stands for Cascading Style Sheets.",
+      "Git was created by Linus Torvalds.",
+      "Dark mode can save battery on OLED screens."
+    ];
+
+    function toggleMode() {
+      document.body.classList.toggle("dark-mode");
+      const lightVid = document.getElementById("bg-video-light");
+      const darkVid = document.getElementById("bg-video-dark");
+
+      if (document.body.classList.contains("dark-mode")) {
+        lightVid.style.display = "none";
+        darkVid.style.display = "block";
+      } else {
+        lightVid.style.display = "block";
+        darkVid.style.display = "none";
+      }
+    }
+
+    function rollDice() {
+      const result = Math.floor(Math.random() * 6) + 1;
+      document.getElementById("diceResult").textContent = result;
+    }
+
+    function randNum() {
+      const num = Math.floor(Math.random() * 100) + 1;
+      document.getElementById("randNum").textContent = num;
+    }
+
+    function randFact() {
+      const randomFact = facts[Math.floor(Math.random() * facts.length)];
+      document.getElementById("fact").textContent = randomFact;
+    }
+  </script>
+</body>
+</html>
